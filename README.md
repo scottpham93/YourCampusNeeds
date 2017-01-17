@@ -4,6 +4,9 @@ For Windows Machines, you'll need two things
   1) a BASH Shell (cmder or gitbash)
   2) the latest version of Node installed (which installs npm)
 
+cmder -> http://cmder.net/
+NODE -> https://nodejs.org/en/
+
 When you pull any new commits run the `npm install` in which ever shell you have which will install all dependencies from package.json (Something to note is that node modules will not be committed thanks to the .gitignore).
 
 Also for any of the following commands to work you'll need the angular-cli found `https://cli.angular.io/`.
