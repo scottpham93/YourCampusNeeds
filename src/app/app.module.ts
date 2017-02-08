@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
 import { RouterModule, Routes } from '@angular/router';
+import { CollapseDirective } from 'ng2-bootstrap';
 
 import { AppComponent } from './app.component';
 
@@ -26,6 +27,7 @@ export const myFirebaseAuthConfig = {
 @NgModule({
   declarations: [
     AppComponent,
+    CollapseDirective
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseConfig, myFirebaseAuthConfig),
