@@ -1,1 +1,21 @@
-<div class="alert alert-success" role="alert">Bootstrap is imported</div>
+<nav class="navbar navbar-default custom-navbar-color">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" style="padding-top:2%;" class="navbar-toggle collapsed" data-toggle="collapse" (click)="isCollapsed = !isCollapsed" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar" style="background-color:white;"></span>
+            <span class="icon-bar" style="background-color:white;"></span>
+            <span class="icon-bar" style="background-color:white;"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img src="../assets/ycn-navbar-logo.png" alt="Your Campus Needs"></a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse" [collapse]="isCollapsed">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Register</a></li>
+            <li><a href="#">Login</a></li>
+          </ul>
+        </div>
+      </div>
+</nav>
