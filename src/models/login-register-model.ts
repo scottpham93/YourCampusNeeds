@@ -1,4 +1,4 @@
-export class RegisterModel{
+export class LoginRegisterModel {
     constructor(
     public email: string,
     public password: string,
