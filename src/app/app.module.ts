@@ -7,8 +7,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { CollapseDirective } from 'ng2-bootstrap';
 
 import { AppComponent } from './app.component';
+import { RegisterComponent } from './register/register.component';
 
 const appRoutes: Routes = [
+  { path: 'register', component: RegisterComponent }
 ];
 
 export const firebaseConfig = {
@@ -27,7 +29,8 @@ export const myFirebaseAuthConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    CollapseDirective
+    CollapseDirective,
+    RegisterComponent
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseConfig, myFirebaseAuthConfig),
