@@ -40,7 +40,7 @@ export const myFirebaseAuthConfig = {
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes, { useHash: true })
   ],
   providers: [],
   bootstrap: [AppComponent]
