@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RegisterModel } from '../../models/register-model';
+import { LoginRegisterModel } from '../../models/login-register-model';
 
 @Component({
   selector: 'app-register',
@@ -8,15 +8,15 @@ import { RegisterModel } from '../../models/register-model';
 })
 export class RegisterComponent
 {
-    model: RegisterModel;
-    loginToastError = true;
+    model: LoginRegisterModel;
+    registerToastError = true;
     constructor()
     {
-        this.model = new RegisterModel('','','');
+        this.model = new LoginRegisterModel('','','');
     }
 
     register()
     {
-        this.loginToastError = false;
+        this.registerToastError = false;
     }
 }
