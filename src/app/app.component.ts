@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { CollapseDirective } from 'ng2-bootstrap';
+import { AngularFire } from 'angularfire2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +11,34 @@ import { CollapseDirective } from 'ng2-bootstrap';
 export class AppComponent
 {
   public isCollapsed: boolean;
+  private loginLogoutLink: string;
 
-  constructor()
+  constructor(private af: AngularFire, private router: Router)
   {
     this.isCollapsed = true;
+    this.af.auth.subscribe(auth => {
+      if(auth != null)
+      {
+        this.loginLogoutLink = 'Logout';
+      }
+      else
+      {
+        this.loginLogoutLink = 'Login';
+      }
+    });
+  }
+
+  handleLoginLogoutLink()
+  {
+    if(this.loginLogoutLink === 'Login')
+    {
+      this.router.navigate(['/login']);
+    }
+    else
+    {
+      this.loginLogoutLink = 'Login';
+      this.af.auth.logout();
+      this.router.navigate(['/']);
+    }
   }
 }
