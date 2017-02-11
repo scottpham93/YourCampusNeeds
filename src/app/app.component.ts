@@ -8,5 +8,10 @@ import { CollapseDirective } from 'ng2-bootstrap';
 })
 export class AppComponent
 {
-  public isCollapsed = true;
+  public isCollapsed: boolean;
+
+  constructor()
+  {
+    this.isCollapsed = true;
+  }
 }
