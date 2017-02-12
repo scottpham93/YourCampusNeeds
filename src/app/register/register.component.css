@@ -42,3 +42,11 @@ input {
 button {
   font-family: 'Raleway', sans-serif;
 }
+
+.alert {
+    font-family: 'Raleway', sans-serif;
+}
+.alert-success {
+  background-color: #1abc9c;
+  color: white;
+}

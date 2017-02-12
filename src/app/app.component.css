@@ -17,6 +17,7 @@
     padding-bottom:0px;
     font-family: 'Raleway', sans-serif;
     color: white;
+    cursor: pointer;
 }
 
 .navbar-nav>li>a:hover {
@@ -36,3 +37,4 @@
     height: 80px;
     line-height: 80px;
 }
+

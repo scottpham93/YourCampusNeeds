@@ -9,8 +9,10 @@ import { CollapseDirective } from 'ng2-bootstrap';
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
+import { SquareComponent } from './square/square.component';
 
 const appRoutes: Routes = [
+  { path: 'square', component: SquareComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent }
 ];
@@ -33,7 +35,8 @@ export const myFirebaseAuthConfig = {
     AppComponent,
     CollapseDirective,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    SquareComponent
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseConfig, myFirebaseAuthConfig),
