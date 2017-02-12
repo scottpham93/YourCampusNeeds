@@ -8,8 +8,8 @@ import { AppComponent } from '.././app.component';
   templateUrl: './square.component.html',
   styleUrls: ['./square.component.css']
 })
-export class SquareComponent {
-
+export class SquareComponent
+{
   constructor(private af: AngularFire, private router: Router, private ac: AppComponent)
   { 
     // if the user isn't logged in then redirect them to the login page
@@ -18,5 +18,4 @@ export class SquareComponent {
       else { this.ac.loginLogoutLink = 'Logout'; }
     }).unsubscribe();
   }
-
 }
