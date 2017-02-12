@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginRegisterModel } from '../../models/login-register-model';
 import { AngularFire } from 'angularfire2';
 import { Router } from '@angular/router';
+import { AppComponent } from '.././app.component';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,8 @@ export class LoginComponent
   loginToastErrorHidden: boolean;
   loginToastVerifiedMessageHidden: boolean;
   model: LoginRegisterModel;
-  constructor(private af: AngularFire, private router: Router)
+
+  constructor(private af: AngularFire, private router: Router, private ac: AppComponent)
   {
     this.loginToastErrorHidden = true;
     this.loginToastVerifiedMessageHidden = true;
@@ -27,6 +29,7 @@ export class LoginComponent
         if(auth.auth.emailVerified)
         {
           console.log('This email has been verified');
+          this.ac.loginLogoutLink = 'Logout';
           this.redirectAfterLogin();
         }
         else
@@ -46,6 +49,6 @@ export class LoginComponent
 
   redirectAfterLogin()
   {
-    this.router.navigate(['/']);
+    this.router.navigate(['/square']);
   }
 }

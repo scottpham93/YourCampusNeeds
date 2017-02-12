@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { LoginRegisterModel } from '../../models/login-register-model';
 import { AngularFire, FirebaseAuthState } from 'angularfire2';
+import { Router } from '@angular/router';
+import { AppComponent } from '.././app.component';
 
 @Component({
   selector: 'app-register',
@@ -11,12 +13,13 @@ export class RegisterComponent
 {
     model: LoginRegisterModel;
     registerToastErrorHidden: boolean;
-    emailToastMessageHidden: boolean;
-    constructor(private af: AngularFire)
+    registerToastVerifyMessageHidden: boolean;
+
+    constructor(private af: AngularFire, private router: Router)
     {
         this.model = new LoginRegisterModel('', '', '');
         this.registerToastErrorHidden = true;
-        this.emailToastMessageHidden = true;
+        this.registerToastVerifyMessageHidden = true;
     }
 
     register()
@@ -27,21 +30,21 @@ export class RegisterComponent
 
             // create the user (this also logs them in so we log them out below)
             this.af.auth.createUser({
-                email: this.model.email,
-                password: this.model.password
+                email: this.model.email, // don't forget to change this back
+                password: this.model.password // don't forget to change this back
             })
             .then(() => {
                 this.af.auth.subscribe(auth => {
                     auth.auth.sendEmailVerification();
-                    console.log('Verification Email Sent');
-                });
+                    this.af.auth.logout();
+                }).unsubscribe();
             })
             .then(() => {
-                this.af.auth.unsubscribe(); // we need to make sure we unsubscribe the listener before logging out
-                this.af.auth.logout();
-                this.emailToastMessageHidden = false;
+                this.registerToastVerifyMessageHidden = false;
                 this.registerToastErrorHidden = true;
-                console.log('User has been logged out');
+                this.model.email = '';
+                this.model.password = '';
+                this.model.confirmPassword = '';
             })
             .catch(error => {
                 console.log(error);
