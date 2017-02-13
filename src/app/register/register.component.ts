@@ -30,8 +30,8 @@ export class RegisterComponent
 
             // create the user (this also logs them in so we log them out below)
             this.af.auth.createUser({
-                email: this.model.email, // don't forget to change this back
-                password: this.model.password // don't forget to change this back
+                email: this.model.email,
+                password: this.model.password
             })
             .then(() => {
                 this.af.auth.subscribe(auth => {

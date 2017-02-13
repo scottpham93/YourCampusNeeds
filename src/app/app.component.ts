@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
 import { CollapseDirective } from 'ng2-bootstrap';
-import { AngularFire } from 'angularfire2';
+import { AngularFire, FirebaseAuthState } from 'angularfire2';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,15 +8,47 @@ import { Router } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent
+
+export class AppComponent implements OnInit, DoCheck, OnDestroy
 {
   public isCollapsed: boolean;
-  public loginLogoutLink = 'Login';
+  public loginLogoutLink;
+  private authStatus: FirebaseAuthState;
 
   constructor(private af: AngularFire, private router: Router)
   {
     this.isCollapsed = true;
   }
+
+  ngOnInit()
+  {
+    this.af.auth.subscribe(auth => {
+      this.authStatus = auth;
+      if (auth == null) { this.router.navigate(['/login']); }
+      else { this.loginLogoutLink = 'Logout'; }
+    });
+    console.log('OnInit called, subscribing to Authentication');
+  }
+
+  ngDoCheck()
+  {
+    if(this.authStatus == null)
+    {
+      this.loginLogoutLink = 'Login';
+    }
+    else
+    {
+      this.loginLogoutLink = 'Logout';
+    }
+  }
+
+  ngOnDestroy()
+  {
+    this.af.auth.unsubscribe();
+    console.log('OnDestroy called, unsubsribing');
+  }
+
+
 
   handleLoginLogoutLink()
   {
@@ -26,7 +58,6 @@ export class AppComponent
     }
     else
     {
-      this.loginLogoutLink = 'Login';
       this.af.auth.logout();
       this.router.navigate(['/']);
     }

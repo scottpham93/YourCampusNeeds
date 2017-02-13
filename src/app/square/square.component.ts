@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AngularFire } from 'angularfire2';
 import { Router } from '@angular/router';
 import { AppComponent } from '.././app.component';
@@ -8,15 +8,7 @@ import { AppComponent } from '.././app.component';
   templateUrl: './square.component.html',
   styleUrls: ['./square.component.css']
 })
-export class SquareComponent {
-
-  constructor(private af: AngularFire, private router: Router, private ac: AppComponent)
-  { 
-    // if the user isn't logged in then redirect them to the login page
-    this.af.auth.subscribe(auth => {
-      if(auth == null) { this.router.navigate(['/login']); }
-      else { this.ac.loginLogoutLink = 'Logout'; }
-    }).unsubscribe();
-  }
-
+export class SquareComponent
+{
+  constructor(private af: AngularFire, private router: Router) { }
 }
