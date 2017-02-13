@@ -1,7 +1,7 @@
 .custom-resize{
     width: 25%;
     height: 25%;
-    padding: 8% 5% 0 5%;
+    padding: 4% 5% 0 5%;
 }
 
 .transit-offset {
@@ -22,6 +22,18 @@
     padding-right: 1%;
 }
 
+.custom-add-post-position {
+    width: 100%;
+    height: 100%;
+    text-align: right;
+    right: 0;
+}
+
+.customm-add-post-size {
+    width: 5%;
+    height:5%;
+}
+
 a {
     color: #707070;
     cursor: pointer;
@@ -29,6 +41,10 @@ a {
     font-family: 'Raleway', sans-serif;
 }
 
-a:active {
+.custom-link-color{
     color: #16a085;
+}
+
+h3 {
+    color: #707070;
 }

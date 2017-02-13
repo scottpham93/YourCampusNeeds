@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { SquareComponent } from './square/square.component';
+import { PostComponent } from './post/post.component';
 
 const appRoutes: Routes = [
   { path: 'square', component: SquareComponent },
@@ -36,7 +37,8 @@ export const myFirebaseAuthConfig = {
     CollapseDirective,
     RegisterComponent,
     LoginComponent,
-    SquareComponent
+    SquareComponent,
+    PostComponent
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseConfig, myFirebaseAuthConfig),
