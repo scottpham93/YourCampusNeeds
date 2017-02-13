@@ -48,8 +48,6 @@ export class AppComponent implements OnInit, DoCheck, OnDestroy
     console.log('OnDestroy called, unsubsribing');
   }
 
-
-
   handleLoginLogoutLink()
   {
     if(this.loginLogoutLink === 'Login')
