@@ -24,7 +24,7 @@ export class AppComponent implements OnInit, DoCheck, OnDestroy
   {
     this.af.auth.subscribe(auth => {
       this.authStatus = auth;
-      if (auth == null) { this.router.navigate(['/login']); }
+      if (auth == null) { this.loginLogoutLink = 'Login'; }
       else { this.loginLogoutLink = 'Logout'; }
     });
     console.log('OnInit called, subscribing to Authentication');
