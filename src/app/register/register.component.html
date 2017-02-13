@@ -3,7 +3,7 @@
     <div [hidden]="registerToastErrorHidden" class="alert alert-danger" role="alert">Oops! Something went wrong. Make sure everything is correct.</div>
     <div [hidden]="registerToastVerifyMessageHidden" class="alert alert-success" role="alert">Great! You have successfully registered, but we need you to verify your email address before you can log in.</div>
     <form>
-        <h5>Hello.</h5>
+        <h5 class="fade-in">Hello.</h5>
       <div class="form-group">
         <label for="email">Email</label>
         <input type="text" class="form-control" id="email" required [(ngModel)]="model.email" name="email" #name="ngModel">
