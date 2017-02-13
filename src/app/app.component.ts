@@ -58,7 +58,6 @@ export class AppComponent implements OnInit, DoCheck, OnDestroy
     }
     else
     {
-      this.loginLogoutLink = 'Login';
       this.af.auth.logout();
       this.router.navigate(['/']);
     }

@@ -32,7 +32,7 @@ h5 {
   color: white;
   text-align: center;
   font-size: 24px;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 input {
@@ -40,11 +40,11 @@ input {
 }
 
 button {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .alert {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 .alert-success {
   background-color: #1abc9c;

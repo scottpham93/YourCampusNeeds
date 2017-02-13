@@ -24,7 +24,7 @@ form {
 }
 
 .form-group {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: white;
 }
 
@@ -32,7 +32,7 @@ h5 {
   color: white;
   text-align: center;
   font-size: 24px;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 input {
@@ -40,5 +40,5 @@ input {
 }
 
 button {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }

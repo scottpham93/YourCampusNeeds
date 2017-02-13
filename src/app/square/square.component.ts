@@ -1,4 +1,4 @@
-import { Component, DoCheck, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { AngularFire } from 'angularfire2';
 import { Router } from '@angular/router';
 import { AppComponent } from '.././app.component';
@@ -10,9 +10,5 @@ import { AppComponent } from '.././app.component';
 })
 export class SquareComponent
 {
-  isActive: boolean;
-  constructor(private af: AngularFire, private router: Router, private ac: AppComponent)
-  {
-    this.isActive = true;
-  }
+  constructor(private af: AngularFire, private router: Router) { }
 }
