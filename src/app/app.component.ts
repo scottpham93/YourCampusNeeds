@@ -13,7 +13,7 @@ export class AppComponent implements OnInit, DoCheck, OnDestroy
 {
   public isCollapsed: boolean;
   public loginLogoutLink;
-  private authStatus: FirebaseAuthState;
+  public authStatus: FirebaseAuthState;
 
   constructor(private af: AngularFire, private router: Router)
   {

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AngularFire } from 'angularfire2';
 import { Router } from '@angular/router';
 import { AppComponent } from '.././app.component';
 
@@ -10,5 +9,8 @@ import { AppComponent } from '.././app.component';
 })
 export class SquareComponent
 {
-  constructor(private af: AngularFire, private router: Router) { }
+  constructor(private ac: AppComponent, private router: Router)
+  {
+    if(this.ac.authStatus == null) { this.router.navigate(['/login']); }
+  }
 }
