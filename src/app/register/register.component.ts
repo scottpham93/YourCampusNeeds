@@ -26,7 +26,12 @@ export class RegisterComponent
     {
         if (this.model.password === this.model.confirmPassword && this.model.password !== '')
         {
-            // this is where we'll check the email to make sure it's .edu
+            // check for edu account
+            if(!this.checkEmailEndingAndGetDomain(this.model.email)) 
+            { 
+                // toast an error message before returning
+                return; 
+            }
 
             // create the user (this also logs them in so we log them out below)
             this.af.auth.createUser({
@@ -48,6 +53,7 @@ export class RegisterComponent
             })
             .catch(error => {
                 console.log(error);
+                this.af.auth.unsubscribe();
                 this.registerToastErrorHidden = false;
                 return;
             });
@@ -55,6 +61,20 @@ export class RegisterComponent
         else
         {
             this.registerToastErrorHidden = false;
+        }
+    }
+
+    checkEmailEndingAndGetDomain(emailAddress: string): Boolean
+    {
+        let parsedEmail = emailAddress.match('@.*.edu$');
+        if(parsedEmail != null)
+        {
+            // send the domain to firebase under the user
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }
