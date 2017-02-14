@@ -66,7 +66,7 @@ export class RegisterComponent
 
     checkEmailEndingAndGetDomain(emailAddress: string): Boolean
     {
-        let parsedEmail = emailAddress.match('@.*.edu$');
+        let parsedEmail = emailAddress.match('(@)(.*)(.edu)$');
         if(parsedEmail != null)
         {
             // send the domain to firebase under the user
