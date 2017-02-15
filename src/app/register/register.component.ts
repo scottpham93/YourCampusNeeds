@@ -14,23 +14,26 @@ export class RegisterComponent
     model: LoginRegisterModel;
     registerToastErrorHidden: boolean;
     registerToastVerifyMessageHidden: boolean;
+    registerToastEmailErrorMessageHidden: boolean;
 
     constructor(private af: AngularFire, private router: Router)
     {
         this.model = new LoginRegisterModel('', '', '');
         this.registerToastErrorHidden = true;
         this.registerToastVerifyMessageHidden = true;
+        this.registerToastEmailErrorMessageHidden = true;
     }
 
     register()
     {
         if (this.model.password === this.model.confirmPassword && this.model.password !== '')
         {
-            // check for edu account
-            if(!this.checkEmailEndingAndGetDomain(this.model.email)) 
-            { 
-                // toast an error message before returning
-                return; 
+            // check for edu account and toast if it isn't
+            if(!this.checkEmailEndingAndGetDomain(this.model.email))
+            {
+                this.registerToastEmailErrorMessageHidden = false;
+                this.registerToastErrorHidden = true;
+                return;
             }
 
             // create the user (this also logs them in so we log them out below)
@@ -47,6 +50,7 @@ export class RegisterComponent
             .then(() => {
                 this.registerToastVerifyMessageHidden = false;
                 this.registerToastErrorHidden = true;
+                this.registerToastEmailErrorMessageHidden = true;
                 this.model.email = '';
                 this.model.password = '';
                 this.model.confirmPassword = '';
@@ -60,6 +64,7 @@ export class RegisterComponent
         }
         else
         {
+            this.registerToastEmailErrorMessageHidden = true;
             this.registerToastErrorHidden = false;
         }
     }
@@ -69,7 +74,9 @@ export class RegisterComponent
         let parsedEmail = emailAddress.match('(@)(.*)(.edu)$');
         if(parsedEmail != null)
         {
-            // send the domain to firebase under the user
+            // TODO: Since we have access to the domain we need to store
+            // that so we can sort by campus automatically later. For now
+            // we'll leave it for a future feature.
             return true;
         }
         else
