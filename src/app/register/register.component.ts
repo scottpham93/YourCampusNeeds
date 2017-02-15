@@ -14,19 +14,27 @@ export class RegisterComponent
     model: LoginRegisterModel;
     registerToastErrorHidden: boolean;
     registerToastVerifyMessageHidden: boolean;
+    registerToastEmailErrorMessageHidden: boolean;
 
     constructor(private af: AngularFire, private router: Router)
     {
         this.model = new LoginRegisterModel('', '', '');
         this.registerToastErrorHidden = true;
         this.registerToastVerifyMessageHidden = true;
+        this.registerToastEmailErrorMessageHidden = true;
     }
 
     register()
     {
         if (this.model.password === this.model.confirmPassword && this.model.password !== '')
         {
-            // this is where we'll check the email to make sure it's .edu
+            // check for edu account and toast if it isn't
+            if(!this.checkEmailEndingAndGetDomain(this.model.email))
+            {
+                this.registerToastEmailErrorMessageHidden = false;
+                this.registerToastErrorHidden = true;
+                return;
+            }
 
             // create the user (this also logs them in so we log them out below)
             this.af.auth.createUser({
@@ -42,19 +50,38 @@ export class RegisterComponent
             .then(() => {
                 this.registerToastVerifyMessageHidden = false;
                 this.registerToastErrorHidden = true;
+                this.registerToastEmailErrorMessageHidden = true;
                 this.model.email = '';
                 this.model.password = '';
                 this.model.confirmPassword = '';
             })
             .catch(error => {
                 console.log(error);
+                this.af.auth.unsubscribe();
                 this.registerToastErrorHidden = false;
                 return;
             });
         }
         else
         {
+            this.registerToastEmailErrorMessageHidden = true;
             this.registerToastErrorHidden = false;
+        }
+    }
+
+    checkEmailEndingAndGetDomain(emailAddress: string): Boolean
+    {
+        let parsedEmail = emailAddress.match('(@)(.*)(.edu)$');
+        if(parsedEmail != null)
+        {
+            // TODO: Since we have access to the domain we need to store
+            // that so we can sort by campus automatically later. For now
+            // we'll leave it for a future feature.
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }
