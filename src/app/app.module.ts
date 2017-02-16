@@ -11,11 +11,16 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { SquareComponent } from './square/square.component';
 import { PostComponent } from './post/post.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { HomeComponent } from './home/home.component';
 
 const appRoutes: Routes = [
+  { path: '', component: HomeComponent },
   { path: 'square', component: SquareComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent }
+  { path: 'login', component: LoginComponent },
+  { path: '404', component: PageNotFoundComponent },
+  { path: '**', redirectTo: '/404'}
 ];
 
 export const firebaseConfig = {
@@ -38,7 +43,9 @@ export const myFirebaseAuthConfig = {
     RegisterComponent,
     LoginComponent,
     SquareComponent,
-    PostComponent
+    PostComponent,
+    PageNotFoundComponent,
+    HomeComponent
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseConfig, myFirebaseAuthConfig),
