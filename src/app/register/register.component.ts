@@ -45,7 +45,7 @@ export class RegisterComponent
             })
             .then(() => {
                 this.af.auth.subscribe(auth => {
-                    //auth.auth.sendEmailVerification();
+                    auth.auth.sendEmailVerification();
                     this.af.database.object('/user/' + auth.auth.uid).set({'college': this.emailDomain})
                     .then(() => {
                         this.af.auth.logout();
