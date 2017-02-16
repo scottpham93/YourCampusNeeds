@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { LoginRegisterModel } from '../../models/login-register-model';
-import { AngularFire, FirebaseAuthState } from 'angularfire2';
+import { AngularFire, FirebaseAuthState, FirebaseObjectObservable } from 'angularfire2';
 import { Router } from '@angular/router';
 import { AppComponent } from '.././app.component';
 
@@ -15,6 +15,7 @@ export class RegisterComponent
     registerToastErrorHidden: boolean;
     registerToastVerifyMessageHidden: boolean;
     registerToastEmailErrorMessageHidden: boolean;
+    public emailDomain: string;
 
     constructor(private af: AngularFire, private router: Router)
     {
@@ -22,6 +23,7 @@ export class RegisterComponent
         this.registerToastErrorHidden = true;
         this.registerToastVerifyMessageHidden = true;
         this.registerToastEmailErrorMessageHidden = true;
+        this.emailDomain = '';
     }
 
     register()
@@ -59,6 +61,9 @@ export class RegisterComponent
                 console.log(error);
                 this.af.auth.unsubscribe();
                 this.registerToastErrorHidden = false;
+                this.registerToastEmailErrorMessageHidden = true;
+                this.model.password = '';
+                this.model.confirmPassword = '';
                 return;
             });
         }
@@ -66,6 +71,8 @@ export class RegisterComponent
         {
             this.registerToastEmailErrorMessageHidden = true;
             this.registerToastErrorHidden = false;
+            this.model.password = '';
+            this.model.confirmPassword = '';
         }
     }
 
@@ -74,9 +81,7 @@ export class RegisterComponent
         let parsedEmail = emailAddress.match('(@)(.*)(.edu)$');
         if(parsedEmail != null)
         {
-            // TODO: Since we have access to the domain we need to store
-            // that so we can sort by campus automatically later. For now
-            // we'll leave it for a future feature.
+            this.emailDomain = parsedEmail[2];
             return true;
         }
         else
