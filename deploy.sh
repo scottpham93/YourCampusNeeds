@@ -15,4 +15,4 @@ cp /etc/letsencrypt/live/yourcampusneeds.com/fullchain.pem ~/YourCampusNeeds/ful
 cp /etc/letsencrypt/live/yourcampusneeds.com/privkey.pem ~/YourCampusNeeds/privkey.pem
 
 echo 'Spinning up http-server now...'
-http-server ./dist -p 80 --ssl --cert 'fullchain.pem' --key 'privkey.pem'
+http-server ./dist -p 443 --ssl --cert 'fullchain.pem' --key 'privkey.pem'
