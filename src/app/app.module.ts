@@ -19,8 +19,7 @@ const appRoutes: Routes = [
   { path: 'square', component: SquareComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: '404', component: PageNotFoundComponent },
-  { path: '**', redirectTo: '/404'}
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 export const firebaseConfig = {
