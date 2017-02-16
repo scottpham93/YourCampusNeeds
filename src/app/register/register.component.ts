@@ -15,7 +15,7 @@ export class RegisterComponent
     registerToastErrorHidden: boolean;
     registerToastVerifyMessageHidden: boolean;
     registerToastEmailErrorMessageHidden: boolean;
-    public emailDomain: string;
+     emailDomain: string;
 
     constructor(private af: AngularFire, private router: Router)
     {
@@ -45,8 +45,11 @@ export class RegisterComponent
             })
             .then(() => {
                 this.af.auth.subscribe(auth => {
-                    auth.auth.sendEmailVerification();
-                    this.af.auth.logout();
+                    //auth.auth.sendEmailVerification();
+                    this.af.database.object('/user/' + auth.auth.uid).set({'college': this.emailDomain})
+                    .then(() => {
+                        this.af.auth.logout();
+                    });
                 }).unsubscribe();
             })
             .then(() => {
