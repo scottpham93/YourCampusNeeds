@@ -78,11 +78,15 @@ export class RegisterComponent
     {
         this.af.auth.subscribe(auth => {
             auth.auth.sendEmailVerification();
-            // I'm not sure if this is exactly how I want to store the users just yet, or use a fanout algorithm.
-            this.af.database.object('/colleges/' + this.emailDomain + '/' + auth.auth.uid).set({ 'college': this.emailDomain })
+            // Storing user with a modified fanout algorithm
+            let uid = auth.auth.uid;
+            this.af.database.object('/colleges/' + this.emailDomain + '/' + uid).set({'user': 'registered'})
+            .then(() => {
+                this.af.database.object('/users/' + uid).set({'college': this.emailDomain})
                 .then(() => {
                     this.af.auth.logout();
                 });
+            });
         }).unsubscribe();
     }
 
