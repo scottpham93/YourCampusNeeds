@@ -26,14 +26,39 @@
   </div>
 </div>
 
-<modal #createPostModal title="Quick Post!" (onClose)="createPostModal.close()" [closeOnOutsideClick]="true">
+<modal #createPostModal title="Quick Post!" cancelButtonLabel="cancel" submitButtonLabel="submit" (onSubmit)="submitPost()">
   <modal-content>
-    <div [hidden]="toastPostMesssageHidden" class="alert alert-success text-center" role="alert">Your post has been uploaded!</div>
-    <app-create-post></app-create-post>
+    <form>
+
+      <div class="form-group">
+        <label for="post-title">Post Title</label>
+        <input type="title" class="form-control" placeholder="What's your title?">
+
+        <label for="description">Description</label>
+        <textarea class="form-control" rows="3" id="description" placeholder="The best posts have detailed descriptions."></textarea>
+
+        <label for="reward">Reward</label>
+        <div class="input-group">
+          <div class="input-group-addon">$</div>
+          <input type="text" class="form-control" placeholder="Amount">
+          <div class="input-group-addon">.00</div>
+        </div>
+
+        <label for="category">Category</label>
+        <select class="form-control" id="category">
+          <option>Market</option>
+          <option>Transit</option>
+          <option>Social</option>
+      </select>
+
+        <label for="reward">Sub-Category</label>
+        <select class="form-control" id="subCategory">
+          <!-- this needs to pull from a list based off of main category, but for now I'll use these-->
+          <option>Textbooks</option>
+          <option>Office Supplies</option>
+      </select>
+      </div>
+
+    </form>
   </modal-content>
-  <modal-footer>
-    <div class="text-center">
-      <button type="submit" class="btn btn-primary custom-button-color" (click)="createPost()">Submit</button>
-    </div>
-  </modal-footer>
 </modal>

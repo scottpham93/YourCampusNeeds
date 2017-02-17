@@ -1,7 +1,9 @@
-import { Component, AfterContentChecked } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from '.././app.component';
 import { ModalModule, Modal } from 'ngx-modal';
+
+
 
 @Component({
   selector: 'app-square',
@@ -10,8 +12,6 @@ import { ModalModule, Modal } from 'ngx-modal';
 })
 export class SquareComponent
 {
-
-  toastPostMesssageHidden: boolean;
 
   constructor(private ac: AppComponent, private router: Router)
   {
@@ -24,12 +24,10 @@ export class SquareComponent
       this.router.navigate(['/login']);
     }
 
-    this.toastPostMesssageHidden = true;
   }
 
-  createPost()
+  submitPost()
   {
-    this.toastPostMesssageHidden = false;
-    console.log('hello world');
+    location.reload();
   }
 }
