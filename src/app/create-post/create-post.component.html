@@ -23,7 +23,7 @@
       </select>
 
       <label for="reward">Sub-Category</label>
-      <select class="form-control">
+      <select class="form-control" id="subCategory" required [(ngModel)]="newPost.subCategory" name="subCategory" #subCategory="ngModel">
           <!-- this needs to pull from a list based off of main category, but for now I'll use these-->
           <option>Textbooks</option>
           <option>Office Supplies</option>
