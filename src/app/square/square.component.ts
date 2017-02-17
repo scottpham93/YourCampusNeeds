@@ -1,6 +1,7 @@
 import { Component, AfterContentChecked } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from '.././app.component';
+import { ModalModule } from 'ngx-modal';
 
 @Component({
   selector: 'app-square',
@@ -17,7 +18,12 @@ export class SquareComponent
        lifecycle hook - AfterContentChecked that will check the authStatus */
     if(this.ac.authStatus === null && this.ac.authStatus !== undefined)
     {
-      this.router.navigate(['/login']); 
+      this.router.navigate(['/login']);
     }
+  }
+
+  createPost()
+  {
+    console.log('hello world');
   }
 }
