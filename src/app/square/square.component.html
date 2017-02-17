@@ -26,8 +26,14 @@
   </div>
 </div>
 
-<modal #createPostModal title="Quick Post!" submitButtonLabel="submit" (onSubmit)="createPostModal.close()">
+<modal #createPostModal title="Quick Post!" (onClose)="createPostModal.close()" [closeOnOutsideClick]="true">
   <modal-content>
+    <div [hidden]="toastPostMesssageHidden" class="alert alert-success text-center" role="alert">Your post has been uploaded!</div>
     <app-create-post></app-create-post>
   </modal-content>
+  <modal-footer>
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary custom-button-color" (click)="createPost()">Submit</button>
+    </div>
+  </modal-footer>
 </modal>

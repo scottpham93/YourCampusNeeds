@@ -1,7 +1,7 @@
 import { Component, AfterContentChecked } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from '.././app.component';
-import { ModalModule } from 'ngx-modal';
+import { ModalModule, Modal } from 'ngx-modal';
 
 @Component({
   selector: 'app-square',
@@ -10,6 +10,9 @@ import { ModalModule } from 'ngx-modal';
 })
 export class SquareComponent
 {
+
+  toastPostMesssageHidden: boolean;
+
   constructor(private ac: AppComponent, private router: Router)
   {
     /* Hotfix: This solves the bug of the user being sent to the login page
@@ -20,10 +23,13 @@ export class SquareComponent
     {
       this.router.navigate(['/login']);
     }
+
+    this.toastPostMesssageHidden = true;
   }
 
   createPost()
   {
+    this.toastPostMesssageHidden = false;
     console.log('hello world');
   }
 }

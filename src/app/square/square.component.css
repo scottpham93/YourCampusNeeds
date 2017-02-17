@@ -48,3 +48,8 @@ a {
 h3 {
     color: #707070;
 }
+
+.custom-button-color {
+  background-color: #16a085;
+  color: white;
+}
