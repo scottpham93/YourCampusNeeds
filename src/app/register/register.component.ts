@@ -38,44 +38,25 @@ export class RegisterComponent
                 return;
             }
 
-            // create the user (this also logs them in so we log them out below)
             this.af.auth.createUser({
                 email: this.model.email,
                 password: this.model.password
             })
             .then(() => {
-                this.af.auth.subscribe(auth => {
-                    auth.auth.sendEmailVerification();
-                    this.af.database.object('/user/' + auth.auth.uid).set({'college': this.emailDomain})
-                    .then(() => {
-                        this.af.auth.logout();
-                    });
-                }).unsubscribe();
+                this.sendEmailVerificationAndToFirebase();
             })
             .then(() => {
-                this.registerToastVerifyMessageHidden = false;
-                this.registerToastErrorHidden = true;
-                this.registerToastEmailErrorMessageHidden = true;
-                this.model.email = '';
-                this.model.password = '';
-                this.model.confirmPassword = '';
+                this.toastSuccessfulRegisterationMessage();
             })
             .catch(error => {
                 console.log(error);
-                this.af.auth.unsubscribe();
-                this.registerToastErrorHidden = false;
-                this.registerToastEmailErrorMessageHidden = true;
-                this.model.password = '';
-                this.model.confirmPassword = '';
+                this.toastRegisterErrorMessage();
                 return;
             });
         }
         else
         {
-            this.registerToastEmailErrorMessageHidden = true;
-            this.registerToastErrorHidden = false;
-            this.model.password = '';
-            this.model.confirmPassword = '';
+            this.toastEmailErrorMessage();
         }
     }
 
@@ -91,5 +72,44 @@ export class RegisterComponent
         {
             return false;
         }
+    }
+
+    sendEmailVerificationAndToFirebase()
+    {
+        this.af.auth.subscribe(auth => {
+            auth.auth.sendEmailVerification();
+            // I'm not sure if this is exactly how I want to store the users just yet, or use a fanout algorithm.
+            this.af.database.object('/colleges/' + this.emailDomain + '/' + auth.auth.uid).set({ 'college': this.emailDomain })
+                .then(() => {
+                    this.af.auth.logout();
+                });
+        }).unsubscribe();
+    }
+
+    toastSuccessfulRegisterationMessage()
+    {
+        this.registerToastVerifyMessageHidden = false;
+        this.registerToastErrorHidden = true;
+        this.registerToastEmailErrorMessageHidden = true;
+        this.model.email = '';
+        this.model.password = '';
+        this.model.confirmPassword = '';
+    }
+
+    toastRegisterErrorMessage()
+    {
+        this.af.auth.unsubscribe();
+        this.registerToastErrorHidden = false;
+        this.registerToastEmailErrorMessageHidden = true;
+        this.model.password = '';
+        this.model.confirmPassword = '';
+    }
+
+    toastEmailErrorMessage()
+    {
+        this.registerToastEmailErrorMessageHidden = true;
+        this.registerToastErrorHidden = false;
+        this.model.password = '';
+        this.model.confirmPassword = '';
     }
 }
