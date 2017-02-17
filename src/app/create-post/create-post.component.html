@@ -3,20 +3,20 @@
 
     <div class="form-group">
       <label for="post-title">Post Title</label>
-      <input type="title" class="form-control" id="post-title" placeholder="What's your title?">
+      <input type="title" class="form-control" id="post-title" required [(ngModel)]="newPost.title" name="post-title" #title="ngModel" placeholder="What's your title?">
 
       <label for="description">Description</label>
-      <textarea class="form-control" rows="3" placeholder="The best posts have detailed descriptions."></textarea>
+      <textarea class="form-control" rows="3" id="description" required [(ngModel)]="newPost.description" name="description" #description="ngModel" placeholder="The best posts have detailed descriptions."></textarea>
 
       <label for="reward">Reward</label>
       <div class="input-group">
         <div class="input-group-addon">$</div>
-        <input type="text" class="form-control" id="exampleInputAmount" placeholder="Amount">
+        <input type="text" class="form-control" id="reward" required [(ngModel)]="newPost.reward" name="reward" #reward="ngModel" placeholder="Amount">
         <div class="input-group-addon">.00</div>
       </div>
 
-      <label for="reward">Category</label>
-      <select class="form-control">
+      <label for="category">Category</label>
+      <select class="form-control" id="category" required [(ngModel)]="newPost.category" name="category" #category="ngModel">
           <option>Market</option>
           <option>Transit</option>
           <option>Social</option>
@@ -29,8 +29,16 @@
     </div>
 
     <div class="text-center">
-      <button type="submit" class="btn btn-primary">Post!</button>
+      <button type="submit" class="btn btn-primary" (click)="post()">Post!</button>
     </div>
     
   </form>
 </div>
+
+<!--
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="text" class="form-control" id="password" required [(ngModel)]="model.password" name="password" #password="ngModel">
+  </div>
+
+-->
