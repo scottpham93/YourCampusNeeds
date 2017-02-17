@@ -80,9 +80,9 @@ export class RegisterComponent
             auth.auth.sendEmailVerification();
             // Storing user with a modified fanout algorithm
             let uid = auth.auth.uid;
-            this.af.database.object('/colleges/' + this.emailDomain + '/' + uid).set({'user': 'registered'})
+            this.af.database.object(`/colleges/${this.emailDomain}/${uid}`).set({'user': 'registered'})
             .then(() => {
-                this.af.database.object('/users/' + uid).set({'college': this.emailDomain})
+                this.af.database.object(`/users/${uid}`).set({'college': this.emailDomain})
                 .then(() => {
                     this.af.auth.logout();
                 });

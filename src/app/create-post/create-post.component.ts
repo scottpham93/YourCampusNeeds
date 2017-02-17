@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NewPostModel } from '../../models/new-post';
 import { AngularFire, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-post',
@@ -12,7 +13,7 @@ export class CreatePostComponent implements OnInit, OnDestroy
   newPost: NewPostModel;
   usersCollege: string;
 
-  constructor(private af: AngularFire)
+  constructor(private af: AngularFire, private router: Router)
   {
     this.newPost = new NewPostModel('', '', 0, '', '');
     this.usersCollege = '';
@@ -21,8 +22,7 @@ export class CreatePostComponent implements OnInit, OnDestroy
   ngOnInit()
   {
     this.af.auth.subscribe(auth => {
-      // TODO this needs to change to /users/
-      this.af.database.object('/user/' + auth.auth.uid).subscribe(snapshot => {
+      this.af.database.object('/users/' + auth.auth.uid).subscribe(snapshot => {
         this.usersCollege = snapshot['college'];
       });
     });
@@ -36,6 +36,7 @@ export class CreatePostComponent implements OnInit, OnDestroy
       return;
     }
     this.postToUsersCollegeNode();
+    this.rediretAfterPost();
   }
 
   postToUsersCollegeNode()
@@ -45,12 +46,19 @@ export class CreatePostComponent implements OnInit, OnDestroy
                   'description': this.newPost.description,
                   'reward': this.newPost.reward,
                   'category': this.newPost.category };
-      this.af.database.list('/posts/' + this.usersCollege + '/' + this.newPost.category).push(dict);
+      this.af.database.list(`/posts/${this.usersCollege}/${this.newPost.category}/${this.newPost.subCategory}`).push(dict);
   }
 
   postIsValid(): boolean
   {
+    // tslint:disable-next-line:max-line-length
     return (this.newPost.title !== '' && this.newPost.description !== '' && this.newPost.reward >= 0 && this.newPost.category !== '') ? true : false;
+  }
+
+  rediretAfterPost()
+  {
+    // TODO: Redirect to 'succesful-post' page
+    this.router.navigate(['/square']);
   }
 
   ngOnDestroy()
