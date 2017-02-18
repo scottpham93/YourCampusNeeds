@@ -60,4 +60,9 @@ export class AppComponent implements OnInit, DoCheck, OnDestroy
       this.router.navigate(['/']);
     }
   }
+
+  squareRedirect()
+  {
+    this.router.navigate(['/square']);
+  }
 }

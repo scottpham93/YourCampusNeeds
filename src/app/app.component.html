@@ -12,7 +12,7 @@
         <div id="navbar" class="collapse navbar-collapse" [collapse]="isCollapsed">
           <ul class="nav navbar-nav navbar-right">
             <li><a href="/">Home</a></li>
-            <li><a routerLink="/">About</a></li>
+            <li><a (click)="squareRedirect()">Square</a></li>
             <li><a routerLink="/register">Register</a></li>
             <li><a (click)="handleLoginLogoutLink()">{{ loginLogoutLink }}</a></li>
           </ul>
