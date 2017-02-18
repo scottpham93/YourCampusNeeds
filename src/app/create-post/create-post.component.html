@@ -1,46 +1,41 @@
-<div class="container">
-  <form>
+<form>
 
-    <div class="form-group">
-      <label for="post-title">Post Title</label>
-      <input type="title" class="form-control" id="post-title" required [(ngModel)]="newPost.title" name="post-title" #title="ngModel" placeholder="What's your title?">
+  <div [hidden]="toastCreatePostErrorMessageHidden" class="alert alert-danger" role="alert">Oops! Something went wrong and your post wasn't created.</div>
+  <div [hidden]="toastCreatePostSuccessMessageHidden" class="alert alert-success" role="alert">Your post has been successfully created!</div>
+  <div [hidden]="toastInvalidPostMessageHidden" class="alert alert-danger" role="alert">Oops! Something isn't right in your post. Please double check it.</div>
 
-      <label for="description">Description</label>
-      <textarea class="form-control" rows="3" id="description" required [(ngModel)]="newPost.description" name="description" #description="ngModel" placeholder="The best posts have detailed descriptions."></textarea>
+  <div class="form-group">
+    <label for="post-title">Post Title</label>
+    <input type="title" class="form-control" id="post-title" required [(ngModel)]="newPost.title" name="post-title" #title="ngModel"
+      placeholder="What's your title?">
 
-      <label for="reward">Reward</label>
-      <div class="input-group">
-        <div class="input-group-addon">$</div>
-        <input type="text" class="form-control" id="reward" required [(ngModel)]="newPost.reward" name="reward" #reward="ngModel" placeholder="Amount">
-        <div class="input-group-addon">.00</div>
-      </div>
+    <label for="description">Description</label>
+    <textarea class="form-control" rows="3" id="description" required [(ngModel)]="newPost.description" name="description" #description="ngModel"
+      placeholder="The best posts have detailed descriptions."></textarea>
 
-      <label for="category">Category</label>
-      <select class="form-control" id="category" required [(ngModel)]="newPost.category" name="category" #category="ngModel">
+    <label for="reward">Reward</label>
+    <div class="input-group">
+      <div class="input-group-addon">$</div>
+      <input type="text" class="form-control" id="reward" required [(ngModel)]="newPost.reward" name="reward" #reward="ngModel"
+        placeholder="Amount">
+      <div class="input-group-addon">.00</div>
+    </div>
+
+    <label for="category">Category</label>
+    <select class="form-control" id="category" required [(ngModel)]="newPost.category" name="category" #category="ngModel">
           <option>Market</option>
           <option>Transit</option>
           <option>Social</option>
       </select>
 
-      <label for="reward">Sub-Category</label>
-      <select class="form-control" id="subCategory" required [(ngModel)]="newPost.subCategory" name="subCategory" #subCategory="ngModel">
+    <label for="reward">Sub-Category</label>
+    <select class="form-control" id="subCategory" required [(ngModel)]="newPost.subCategory" name="subCategory" #subCategory="ngModel">
           <!-- this needs to pull from a list based off of main category, but for now I'll use these-->
           <option>Textbooks</option>
           <option>Office Supplies</option>
       </select>
-    </div>
-
-    <div class="text-center">
-      <button type="submit" class="btn btn-primary" (click)="post()">Create Post!</button>
-    </div>
-    
-  </form>
-</div>
-
-<!--
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input type="text" class="form-control" id="password" required [(ngModel)]="model.password" name="password" #password="ngModel">
   </div>
 
--->
+  <button type="button" class="btn btn-primary" (click)="post()">Create Post!</button>
+
+</form>

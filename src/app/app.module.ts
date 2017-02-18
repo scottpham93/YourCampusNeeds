@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
 import { RouterModule, Routes } from '@angular/router';
 import { CollapseDirective } from 'ng2-bootstrap';
+import { ModalModule } from 'ngx-modal';
 
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './register/register.component';
@@ -54,7 +55,8 @@ export const myFirebaseAuthConfig = {
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(appRoutes, { useHash: true })
+    RouterModule.forRoot(appRoutes, { useHash: true }),
+    ModalModule
   ],
   providers: [],
   bootstrap: [AppComponent]

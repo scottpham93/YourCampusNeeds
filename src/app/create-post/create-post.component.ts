@@ -12,19 +12,29 @@ export class CreatePostComponent implements OnInit, OnDestroy
 {
   newPost: NewPostModel;
   usersCollege: string;
+  toastCreatePostErrorMessageHidden: boolean;
+  toastCreatePostSuccessMessageHidden: boolean;
+  toastInvalidPostMessageHidden: boolean;
+  item: FirebaseObjectObservable<any>;
+  authSubscription;
+  itemSubscription;
 
   constructor(private af: AngularFire, private router: Router)
   {
     this.newPost = new NewPostModel('', '', 0, '', '');
     this.usersCollege = '';
+    this.toastCreatePostErrorMessageHidden = true;
+    this.toastCreatePostSuccessMessageHidden = true;
+    this.toastInvalidPostMessageHidden = true;
   }
 
   ngOnInit()
   {
-    this.af.auth.subscribe(auth => {
-      this.af.database.object('/users/' + auth.auth.uid).subscribe(snapshot => {
-        this.usersCollege = snapshot['college'];
-      });
+    this.authSubscription = this.af.auth.subscribe(auth => {
+        this.item = this.af.database.object('/users/' + auth.auth.uid);
+        this.itemSubscription = this.item.subscribe(snapshot => {
+          this.usersCollege = snapshot['college'];
+        });
     });
   }
 
@@ -32,11 +42,12 @@ export class CreatePostComponent implements OnInit, OnDestroy
   {
     if(!this.postIsValid())
     {
-      // TODO: toast an error message here
+      this.toastInvalidPostMessageHidden = false;
+      this.toastCreatePostSuccessMessageHidden = true;
+      this.toastCreatePostErrorMessageHidden = true;
       return;
     }
     this.postToUsersCollegeNode();
-    this.rediretAfterPost();
   }
 
   postToUsersCollegeNode()
@@ -47,7 +58,24 @@ export class CreatePostComponent implements OnInit, OnDestroy
                   'reward': this.newPost.reward,
                   'category': this.newPost.category,
                   'subCategory': this.newPost.category };
-      this.af.database.list(`/posts/${this.usersCollege}/${this.newPost.category}/${this.newPost.subCategory}`).push(dict);
+                  console.log(this.usersCollege);
+      this.af.database.list(`/posts/${this.usersCollege}/${this.newPost.category}/${this.newPost.subCategory}`).push(dict)
+      .then(() => {
+        this.toastCreatePostErrorMessageHidden = true;
+        this.toastInvalidPostMessageHidden = true;
+        this.toastCreatePostSuccessMessageHidden = false;
+      })
+      .catch(() => {
+        this.toastCreatePostErrorMessageHidden = false;
+        this.toastInvalidPostMessageHidden = true;
+        this.toastCreatePostSuccessMessageHidden = true;
+      });
+  }
+
+  ngOnDestroy()
+  {
+    this.authSubscription.unsubscribe();
+    this.itemSubscription.unsubscribe();
   }
 
   postIsValid(): boolean
@@ -55,27 +83,4 @@ export class CreatePostComponent implements OnInit, OnDestroy
     // tslint:disable-next-line:max-line-length
     return (this.newPost.title !== '' && this.newPost.description !== '' && this.newPost.reward >= 0 && this.newPost.category !== '') ? true : false;
   }
-
-  rediretAfterPost()
-  {
-    // TODO: Redirect to 'succesful-post' page
-    this.router.navigate(['/square']);
-  }
-
-  ngOnDestroy()
-  {
-    this.af.auth.unsubscribe();
-  }
 }
-
-/*
-  |*-posts
-      |
-      |*-college
-          |
-          |*-market / transit / social
-              |
-              |*-autoId
-                  |
-                  |*-post-info {title, desc, views?, etc}
-*/
