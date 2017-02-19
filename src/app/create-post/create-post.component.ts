@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NewPostModel } from '../../models/new-post';
 import { AngularFire, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2';
 import { Router } from '@angular/router';
+import { AppComponent } from '.././app.component';
 
 @Component({
   selector: 'app-create-post',
@@ -19,7 +20,7 @@ export class CreatePostComponent implements OnInit, OnDestroy
   authSubscription;
   itemSubscription;
 
-  constructor(private af: AngularFire, private router: Router)
+  constructor(private af: AngularFire, private router: Router, private appComponent: AppComponent)
   {
     this.newPost = new NewPostModel('', '', 0, '', '');
     this.usersCollege = '';
@@ -30,6 +31,7 @@ export class CreatePostComponent implements OnInit, OnDestroy
 
   ngOnInit()
   {
+    if(this.appComponent.authStatus == null) { return; }
     this.authSubscription = this.af.auth.subscribe(auth => {
         this.item = this.af.database.object('/users/' + auth.auth.uid);
         this.itemSubscription = this.item.subscribe(snapshot => {
@@ -58,7 +60,6 @@ export class CreatePostComponent implements OnInit, OnDestroy
                   'reward': this.newPost.reward,
                   'category': this.newPost.category,
                   'subCategory': this.newPost.category };
-                  console.log(this.usersCollege);
       this.af.database.list(`/posts/${this.usersCollege}/${this.newPost.category}/${this.newPost.subCategory}`).push(dict)
       .then(() => {
         this.toastCreatePostErrorMessageHidden = true;
@@ -74,6 +75,7 @@ export class CreatePostComponent implements OnInit, OnDestroy
 
   ngOnDestroy()
   {
+    if(this.appComponent.authStatus == null) { return; }
     this.authSubscription.unsubscribe();
     this.itemSubscription.unsubscribe();
   }
