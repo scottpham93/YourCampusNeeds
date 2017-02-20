@@ -50,6 +50,7 @@ export class AppComponent implements OnInit, DoCheck, OnDestroy
 
   handleLoginLogoutLink()
   {
+    this.isCollapsed = true;
     if(this.loginLogoutLink === 'Login')
     {
       this.router.navigate(['/login']);
@@ -61,8 +62,21 @@ export class AppComponent implements OnInit, DoCheck, OnDestroy
     }
   }
 
+  homeRedirect()
+  {
+    this.isCollapsed = true;
+    this.router.navigate(['/']);
+  }
+
+  registerRedirect()
+  {
+    this.isCollapsed = true;
+    this.router.navigate(['/register']);
+  }
+
   squareRedirect()
   {
+    this.isCollapsed = true;
     this.router.navigate(['/square']);
   }
 }

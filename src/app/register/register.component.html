@@ -12,12 +12,12 @@
 
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="text" class="form-control" id="password" required [(ngModel)]="model.password" name="password" #password="ngModel">
+        <input type="password" class="form-control" id="password" required [(ngModel)]="model.password" name="password" #password="ngModel">
       </div>
 
       <div class="form-group">
         <label for="confirmPassword">Confirm Password</label>
-        <input type="text" novalidate class="form-control" id="confirmPassword" required [(ngModel)]="model.confirmPassword" name="confirmPassword" #confirmPassword="ngModel">
+        <input type="password" novalidate class="form-control" id="confirmPassword" required [(ngModel)]="model.confirmPassword" name="confirmPassword" #confirmPassword="ngModel">
       </div>
 
       <button type="submit" class="btn btn-default center-block custom-button-color" (click)="register()">Register</button>
