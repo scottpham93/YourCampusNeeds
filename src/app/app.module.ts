@@ -15,6 +15,8 @@ import { PostComponent } from './post/post.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { HomeComponent } from './home/home.component';
 import { CreatePostComponent } from './create-post/create-post.component';
+import { AboutComponent } from './about/about.component';
+import { PrivacyComponent } from './privacy/privacy.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -22,6 +24,8 @@ const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'create-post', component: CreatePostComponent },
+  { path: 'about', component: AboutComponent },
+  { path: 'privacy', component: PrivacyComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 
@@ -48,7 +52,9 @@ export const myFirebaseAuthConfig = {
     PostComponent,
     PageNotFoundComponent,
     HomeComponent,
-    CreatePostComponent
+    CreatePostComponent,
+    AboutComponent,
+    PrivacyComponent
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseConfig, myFirebaseAuthConfig),
