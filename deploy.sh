@@ -7,6 +7,9 @@ git reset --hard
 echo 'Pulling latest version...'
 git pull
 
+echo 'Installing dependencies...'
+npm install
+
 echo 'Building project for deployment...'
 ng build
 
