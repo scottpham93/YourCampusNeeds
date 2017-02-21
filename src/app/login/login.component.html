@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div [hidden]="loginToastErrorHidden" class="alert alert-danger" role="alert">Oops! Something went wrong. Please try logging in again.</div>
+    <div [hidden]="loginToastVerifiedMessageHidden" class="alert alert-danger" role="alert">Sorry. You need to verify your email first.</div>
+
+    <form>
+      <h5 class="fade-in">Welcome Back.</h5>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" class="form-control" id="email" required [(ngModel)]="model.email" name="email" #name="ngModel">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" required [(ngModel)]="model.password" name="password" #password="ngModel">
+      </div>
+
+      <button type="submit" class="btn btn-default center-block custom-button-color" (click)="login()">Login</button>
+    </form>
+    </div>
+</div>

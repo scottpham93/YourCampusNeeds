@@ -1,0 +1,47 @@
+.custom-navbar-color {
+    background-color: #16a085;
+}
+
+.navbar-brand {
+    padding: 2%;
+}
+.navbar-brand>img {
+    max-height: 100%;
+    height: 100%;
+    width: auto;
+    margin: 0 auto;
+}
+
+button {
+    max-height: 100%;
+    height: 100%;
+    width: auto;
+    margin: 4% 10% 0 0;
+}
+
+.navbar-nav>li>a {
+    padding-top:0px;
+    padding-bottom:0px;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    cursor: pointer;
+}
+
+.navbar-nav>li>a:hover {
+    color: #2c3e50;
+}
+
+.navbar-nav>li>a:active {
+    background-color: transparent;
+}
+
+.navbar-nav>li>a:focus {
+    background-color: transparent;
+}
+
+/* EDIT these but should be the same depending on on what font you're using */
+.navbar-brand, .navbar-nav>li>a {
+    height: 80px;
+    line-height: 80px;
+}
+
