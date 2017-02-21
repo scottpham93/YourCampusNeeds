@@ -31,7 +31,6 @@ export class CreatePostComponent implements OnInit, OnDestroy
 
   ngOnInit()
   {
-    if(this.appComponent.authStatus == null) { return; }
     this.authSubscription = this.af.auth.subscribe(auth => {
         this.item = this.af.database.object('/users/' + auth.auth.uid);
         this.itemSubscription = this.item.subscribe(snapshot => {
@@ -75,7 +74,7 @@ export class CreatePostComponent implements OnInit, OnDestroy
 
   ngOnDestroy()
   {
-    if(this.appComponent.authStatus == null) { return; }
+    if(this.appComponent.authStatus === null || this.authSubscription === undefined) { return; }
     this.authSubscription.unsubscribe();
     this.itemSubscription.unsubscribe();
   }
