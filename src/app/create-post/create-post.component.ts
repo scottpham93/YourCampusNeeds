@@ -9,7 +9,7 @@ import { AppComponent } from '.././app.component';
   templateUrl: './create-post.component.html',
   styleUrls: ['./create-post.component.css']
 })
-export class CreatePostComponent
+export class CreatePostComponent implements OnDestroy
 {
   newPost: PostModel;
   college: string;
@@ -85,5 +85,10 @@ export class CreatePostComponent
   {
     // tslint:disable-next-line:max-line-length
     return (this.newPost.title !== '' && this.newPost.description !== '' && this.newPost.reward >= 0 && this.newPost.category !== '') ? true : false;
+  }
+
+  ngOnDestroy()
+  {
+    
   }
 }

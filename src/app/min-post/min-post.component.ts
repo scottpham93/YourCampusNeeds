@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppComponent } from '../app.component';
 import { PostModel } from '../../models/post-model';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 import { AngularFire, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2';
 
 @Component({
@@ -17,31 +18,35 @@ export class MinPostComponent implements OnInit, OnDestroy
   college: string;
   posts = [];
   item: FirebaseObjectObservable <any>;
-  usersCollege: string;
-  reloadedPage: boolean;
-  authSubscription;
-  userSubscription;
-  itemSubscription;
-  innerItemSubscription;
+  authSubscription: Subscription;
+  userSubscription: Subscription;
+  itemSubscription: Subscription;
+  innerItemSubscription: Subscription;
 
   constructor(private af: AngularFire, private appComponent: AppComponent, private router: Router)
   {
     this.uid = this.appComponent.currentUser.uid;
     this.college = this.appComponent.currentUser.college;
+    this.authSubscription = null;
+    this.userSubscription = null;
+    this.itemSubscription = null;
+    this.innerItemSubscription = null;
+    console.log('Min-Post Loaded');
+    console.log(this.uid);
+    console.log(this.college);
   }
 
   ngOnInit()
   {
+    console.log('Min-Post OnInit called');
     if(this.uid !== null && this.college !== null)
     {
       console.log('Uid was not null');
       this.getPost('Social');
-      this.reloadedPage = false;
     }
-    else
+    else if (this.appComponent.authStatus !== null)
     {
       console.log('Uid was null');
-      this.reloadedPage = true;
       this.authSubscription = this.af.auth.subscribe(auth => {
         this.uid = auth.auth.uid;
         this.userSubscription = this.af.database.object(`/users/${this.uid}`).subscribe(snapshot => {
@@ -65,22 +70,26 @@ export class MinPostComponent implements OnInit, OnDestroy
                                         postItems['category'],
                                         postItems['subCategory'] );
           this.posts.push(post);
+          console.log('from inside innerItem' + snapshot.key);
         });
      });
+     console.log('from inside itemSub');
     });
   }
 
   ngOnDestroy()
   {
-    console.log('MinDestroyedCalled');
-    if(this.authSubscription !== undefined)
-    { 
+    console.log('Unsubscribing from DB');
+
+    if(this.itemSubscription !== null) { this.itemSubscription.unsubscribe(); }
+    if(this.innerItemSubscription !== null) { this.innerItemSubscription.unsubscribe();}
+
+    // this meant the user reloaded the page and app.component hadn't finsihed getting its info
+    if(this.authSubscription !== null)
+    {
       console.log('Unsubscribed because uid was null');
       this.authSubscription.unsubscribe();
       this.userSubscription.unsubscribe();
     }
-    console.log('unsubscribing from db');
-    this.itemSubscription.unsubscribe();
-    this.innerItemSubscription.unsubscribe();
   }
 }
