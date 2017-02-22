@@ -52,6 +52,7 @@ export class MinPostComponent implements OnInit, OnDestroy
 
   getPost(category: string)
   {
+    let maxElements = 2;
     this.itemSubscription = this.af.database.list(`/post-references/${this.college}/${category}`, { preserveSnapshot: true })
     .subscribe(snapshots => {
       snapshots.forEach(snapshot => {
@@ -62,7 +63,10 @@ export class MinPostComponent implements OnInit, OnDestroy
                                         postItems['reward'],
                                         postItems['category'],
                                         postItems['subCategory'] );
-          this.posts.push(post);
+          if(this.posts.length <= maxElements - 1)
+          {
+            this.posts.push(post);
+          }
         },
         error => {
           console.log('Something went wrong. Unsubscribing.');
