@@ -17,6 +17,7 @@ import { HomeComponent } from './home/home.component';
 import { CreatePostComponent } from './create-post/create-post.component';
 import { AboutComponent } from './about/about.component';
 import { PrivacyComponent } from './privacy/privacy.component';
+import { MinPostComponent } from './min-post/min-post.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -26,6 +27,7 @@ const appRoutes: Routes = [
   { path: 'create-post', component: CreatePostComponent },
   { path: 'about', component: AboutComponent },
   { path: 'privacy', component: PrivacyComponent },
+  { path: 'min-post', component: MinPostComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 
@@ -54,7 +56,8 @@ export const myFirebaseAuthConfig = {
     HomeComponent,
     CreatePostComponent,
     AboutComponent,
-    PrivacyComponent
+    PrivacyComponent,
+    MinPostComponent
   ],
   imports: [
     AngularFireModule.initializeApp(firebaseConfig, myFirebaseAuthConfig),

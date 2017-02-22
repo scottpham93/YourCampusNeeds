@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NewPostModel } from '../../models/new-post';
+import { PostModel } from '../../models/post-model';
 import { AngularFire, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2';
 import { Router } from '@angular/router';
 import { AppComponent } from '.././app.component';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-create-post',
@@ -11,19 +12,22 @@ import { AppComponent } from '.././app.component';
 })
 export class CreatePostComponent implements OnInit, OnDestroy
 {
-  newPost: NewPostModel;
-  usersCollege: string;
+  newPost: PostModel;
+  college: string;
+  uid: string;
+  authSubscription: Subscription;
+  userSubscription: Subscription;
   toastCreatePostErrorMessageHidden: boolean;
   toastCreatePostSuccessMessageHidden: boolean;
   toastInvalidPostMessageHidden: boolean;
-  item: FirebaseObjectObservable<any>;
-  authSubscription;
-  itemSubscription;
 
   constructor(private af: AngularFire, private router: Router, private appComponent: AppComponent)
   {
-    this.newPost = new NewPostModel('', '', 0, '', '');
-    this.usersCollege = '';
+    this.newPost = new PostModel('', '', 0, '', '');
+    this.college = this.appComponent.currentUser.college;
+    this.uid = this.appComponent.currentUser.uid;
+    this.authSubscription = null;
+    this.userSubscription = null;
     this.toastCreatePostErrorMessageHidden = true;
     this.toastCreatePostSuccessMessageHidden = true;
     this.toastInvalidPostMessageHidden = true;
@@ -31,27 +35,28 @@ export class CreatePostComponent implements OnInit, OnDestroy
 
   ngOnInit()
   {
-    this.authSubscription = this.af.auth.subscribe(auth => {
-        this.item = this.af.database.object('/users/' + auth.auth.uid);
-        this.itemSubscription = this.item.subscribe(snapshot => {
-          this.usersCollege = snapshot['college'];
+    if((this.uid === null || this.college === null) && this.appComponent.authStatus !== null)
+    {
+      this.authSubscription = this.af.auth.subscribe(auth => {
+        this.uid = auth.auth.uid;
+        this.userSubscription = this.af.database.object(`/users/${this.uid}`).subscribe(snapshot => {
+          this.college = snapshot['college'];
         });
-    });
+      });
+    }
   }
 
   post()
   {
     if(!this.postIsValid())
     {
-      this.toastInvalidPostMessageHidden = false;
-      this.toastCreatePostSuccessMessageHidden = true;
-      this.toastCreatePostErrorMessageHidden = true;
+      this.toastPostInvalid();
       return;
     }
-    this.postToUsersCollegeNode();
+    this.sendPostToFirebase();
   }
 
-  postToUsersCollegeNode()
+  sendPostToFirebase()
   {
       let dict = {
                   'title': this.newPost.title,
@@ -59,29 +64,52 @@ export class CreatePostComponent implements OnInit, OnDestroy
                   'reward': this.newPost.reward,
                   'category': this.newPost.category,
                   'subCategory': this.newPost.category };
-      this.af.database.list(`/posts/${this.usersCollege}/${this.newPost.category}/${this.newPost.subCategory}`).push(dict)
+      let postReference = this.af.database.list('/posts').push(dict).key;
+      let referenceDict = { };
+      referenceDict[postReference] = 1;
+      this.af.database.object(`/user-posts/${this.uid}`).update(referenceDict);
+      this.af.database.object(`/post-references/${this.college}/${this.newPost.category}`).update(referenceDict)
       .then(() => {
-        this.toastCreatePostErrorMessageHidden = true;
-        this.toastInvalidPostMessageHidden = true;
-        this.toastCreatePostSuccessMessageHidden = false;
+        this.toastSuccessMessage();
       })
       .catch(() => {
-        this.toastCreatePostErrorMessageHidden = false;
-        this.toastInvalidPostMessageHidden = true;
-        this.toastCreatePostSuccessMessageHidden = true;
+        this.toastErrorMessage();
       });
   }
 
-  ngOnDestroy()
+  toastPostInvalid()
   {
-    if(this.appComponent.authStatus === null || this.authSubscription === undefined) { return; }
-    this.authSubscription.unsubscribe();
-    this.itemSubscription.unsubscribe();
+    this.toastInvalidPostMessageHidden = false;
+    this.toastCreatePostSuccessMessageHidden = true;
+    this.toastCreatePostErrorMessageHidden = true;
+  }
+
+  toastSuccessMessage()
+  {
+    this.toastCreatePostErrorMessageHidden = true;
+    this.toastInvalidPostMessageHidden = true;
+    this.toastCreatePostSuccessMessageHidden = false;
+  }
+
+  toastErrorMessage()
+  {
+    this.toastCreatePostErrorMessageHidden = false;
+    this.toastInvalidPostMessageHidden = true;
+    this.toastCreatePostSuccessMessageHidden = true;
   }
 
   postIsValid(): boolean
   {
     // tslint:disable-next-line:max-line-length
     return (this.newPost.title !== '' && this.newPost.description !== '' && this.newPost.reward >= 0 && this.newPost.category !== '') ? true : false;
+  }
+
+  ngOnDestroy()
+  {
+    if(this.authSubscription !== null)
+    {
+      this.authSubscription.unsubscribe();
+      this.userSubscription.unsubscribe();
+    }
   }
 }

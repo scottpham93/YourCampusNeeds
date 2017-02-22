@@ -1,4 +1,4 @@
-export class NewPostModel {
+export class PostModel {
     constructor(
         public title: string,
         public description: string,
