@@ -31,22 +31,16 @@ export class MinPostComponent implements OnInit, OnDestroy
     this.userSubscription = null;
     this.itemSubscription = null;
     this.innerItemSubscription = null;
-    console.log('Min-Post Loaded');
-    console.log(this.uid);
-    console.log(this.college);
   }
 
   ngOnInit()
   {
-    console.log('Min-Post OnInit called');
     if(this.uid !== null && this.college !== null)
     {
-      console.log('Uid was not null');
       this.getPost('Social');
     }
     else if (this.appComponent.authStatus !== null)
     {
-      console.log('Uid was null');
       this.authSubscription = this.af.auth.subscribe(auth => {
         this.uid = auth.auth.uid;
         this.userSubscription = this.af.database.object(`/users/${this.uid}`).subscribe(snapshot => {
@@ -59,35 +53,35 @@ export class MinPostComponent implements OnInit, OnDestroy
 
   getPost(category: string)
   {
-    console.log(this.college + ' *** ' + this.uid);
     this.itemSubscription = this.af.database.list(`/post-references/${this.college}/${category}`, { preserveSnapshot: true })
     .subscribe(snapshots => {
       snapshots.forEach(snapshot => {
-        this.innerItemSubscription = this.af.database.object(`/posts/${snapshot.key}`).subscribe(postItems => {
+        this.item = this.af.database.object(`/posts/${snapshot.key}`);
+        this.innerItemSubscription = this.item.subscribe(postItems => {
           let post = new PostModel( postItems['title'],
                                         postItems['description'],
                                         postItems['reward'],
                                         postItems['category'],
                                         postItems['subCategory'] );
           this.posts.push(post);
-          console.log('from inside innerItem' + snapshot.key);
+        },
+        error => {
+          console.log('Something went wrong. Unsubscribing.');
+          this.innerItemSubscription.unsubscribe();
+          return;
         });
      });
-     console.log('from inside itemSub');
-    });
+    })
   }
 
   ngOnDestroy()
   {
-    console.log('Unsubscribing from DB');
-
     if(this.itemSubscription !== null) { this.itemSubscription.unsubscribe(); }
-    if(this.innerItemSubscription !== null) { this.innerItemSubscription.unsubscribe();}
+    if(this.innerItemSubscription !== null) { this.innerItemSubscription.unsubscribe(); }
 
     // this meant the user reloaded the page and app.component hadn't finsihed getting its info
     if(this.authSubscription !== null)
     {
-      console.log('Unsubscribed because uid was null');
       this.authSubscription.unsubscribe();
       this.userSubscription.unsubscribe();
     }
