@@ -14,23 +14,40 @@ export class MinPostComponent implements OnDestroy
 
   uid: string;
   college: string;
-  post: PostModel;
+  posts = [];
   item: FirebaseObjectObservable <any>;
   usersCollege: string;
-  authSubscription;
   itemSubscription;
-  postSubscription;
+  public innerItemSubscription;
 
   constructor(private af: AngularFire, private appComponent: AppComponent)
-  { 
+  {
     this.uid = this.appComponent.currentUser.uid;
     this.college = this.appComponent.currentUser.college;
-    this.post = new PostModel('', '', 0, '', '');
+    this.getPost('Social');
+  }
+
+  getPost(category: string)
+  {
+    this.itemSubscription = this.af.database.list(`/post-references/${this.college}/${category}`, { preserveSnapshot: true })
+    .subscribe(snapshots => {
+      snapshots.forEach(snapshot => {
+        this.innerItemSubscription = this.af.database.object(`/posts/${snapshot.key}`).subscribe(postItems => {
+          let post = new PostModel( postItems['title'],
+                                        postItems['description'],
+                                        postItems['reward'],
+                                        postItems['category'],
+                                        postItems['subCategory'] );
+          this.posts.push(post);
+        });
+      });
+    });
   }
 
   ngOnDestroy()
   {
-
+    this.itemSubscription.unsubscribe();
+    if(this.innerItemSubscription !== undefined ) { this.innerItemSubscription.unsubscribe(); }
   }
 
 }

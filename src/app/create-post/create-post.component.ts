@@ -12,7 +12,7 @@ import { AppComponent } from '.././app.component';
 export class CreatePostComponent
 {
   newPost: PostModel;
-  usersCollege: string;
+  college: string;
   uid: string;
   toastCreatePostErrorMessageHidden: boolean;
   toastCreatePostSuccessMessageHidden: boolean;
@@ -22,7 +22,7 @@ export class CreatePostComponent
   constructor(private af: AngularFire, private router: Router, private appComponent: AppComponent)
   {
     this.newPost = new PostModel('', '', 0, '', '');
-    this.usersCollege = this.appComponent.currentUser.college;
+    this.college = this.appComponent.currentUser.college;
     this.uid = this.appComponent.currentUser.uid;
     this.toastCreatePostErrorMessageHidden = true;
     this.toastCreatePostSuccessMessageHidden = true;
@@ -51,7 +51,7 @@ export class CreatePostComponent
       let referenceDict = { };
       referenceDict[postReference] = 1;
       this.af.database.object(`/user-posts/${this.uid}`).update(referenceDict);
-      this.af.database.object(`/post-references/${this.usersCollege}/${this.newPost.category}`).update(referenceDict)
+      this.af.database.object(`/post-references/${this.college}/${this.newPost.category}`).update(referenceDict)
       .then(() => {
         this.toastSuccessMessage();
       })
