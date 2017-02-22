@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, DoCheck, OnDestroy
   constructor(private af: AngularFire, private router: Router)
   {
     this.isCollapsed = true;
-    this.currentUser = new CurrentUserModel('', '');
+    this.currentUser = new CurrentUserModel(null, null);
   }
 
   ngOnInit()

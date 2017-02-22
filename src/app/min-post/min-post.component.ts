@@ -1,6 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppComponent } from '../app.component';
 import { PostModel } from '../../models/post-model';
+import { Router } from '@angular/router';
 import { AngularFire, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2';
 
 @Component({
@@ -9,7 +10,7 @@ import { AngularFire, FirebaseObjectObservable, FirebaseListObservable } from 'a
   styleUrls: ['./min-post.component.css']
 })
 
-export class MinPostComponent implements OnDestroy
+export class MinPostComponent implements OnInit, OnDestroy
 {
 
   uid: string;
@@ -17,18 +18,43 @@ export class MinPostComponent implements OnDestroy
   posts = [];
   item: FirebaseObjectObservable <any>;
   usersCollege: string;
+  reloadedPage: boolean;
+  authSubscription;
+  userSubscription;
   itemSubscription;
-  public innerItemSubscription;
+  innerItemSubscription;
 
-  constructor(private af: AngularFire, private appComponent: AppComponent)
+  constructor(private af: AngularFire, private appComponent: AppComponent, private router: Router)
   {
     this.uid = this.appComponent.currentUser.uid;
     this.college = this.appComponent.currentUser.college;
-    this.getPost('Social');
+  }
+
+  ngOnInit()
+  {
+    if(this.uid !== null && this.college !== null)
+    {
+      console.log('Uid was not null');
+      this.getPost('Social');
+      this.reloadedPage = false;
+    }
+    else
+    {
+      console.log('Uid was null');
+      this.reloadedPage = true;
+      this.authSubscription = this.af.auth.subscribe(auth => {
+        this.uid = auth.auth.uid;
+        this.userSubscription = this.af.database.object(`/users/${this.uid}`).subscribe(snapshot => {
+          this.college = snapshot['college'];
+          this.getPost('Social');
+        });
+      });
+    }
   }
 
   getPost(category: string)
   {
+    console.log(this.college + ' *** ' + this.uid);
     this.itemSubscription = this.af.database.list(`/post-references/${this.college}/${category}`, { preserveSnapshot: true })
     .subscribe(snapshots => {
       snapshots.forEach(snapshot => {
@@ -40,14 +66,21 @@ export class MinPostComponent implements OnDestroy
                                         postItems['subCategory'] );
           this.posts.push(post);
         });
-      });
+     });
     });
   }
 
   ngOnDestroy()
   {
+    console.log('MinDestroyedCalled');
+    if(this.authSubscription !== undefined)
+    { 
+      console.log('Unsubscribed because uid was null');
+      this.authSubscription.unsubscribe();
+      this.userSubscription.unsubscribe();
+    }
+    console.log('unsubscribing from db');
     this.itemSubscription.unsubscribe();
-    if(this.innerItemSubscription !== undefined ) { this.innerItemSubscription.unsubscribe(); }
+    this.innerItemSubscription.unsubscribe();
   }
-
 }
