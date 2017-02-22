@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { PostModel } from '../../models/post-model';
 import { AngularFire, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2';
 import { Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { AppComponent } from '.././app.component';
   templateUrl: './create-post.component.html',
   styleUrls: ['./create-post.component.css']
 })
-export class CreatePostComponent implements OnInit, OnDestroy
+export class CreatePostComponent
 {
   newPost: PostModel;
   usersCollege: string;
@@ -18,29 +18,15 @@ export class CreatePostComponent implements OnInit, OnDestroy
   toastCreatePostSuccessMessageHidden: boolean;
   toastInvalidPostMessageHidden: boolean;
   item: FirebaseObjectObservable<any>;
-  authSubscription;
-  itemSubscription;
-  postSubscription;
 
   constructor(private af: AngularFire, private router: Router, private appComponent: AppComponent)
   {
     this.newPost = new PostModel('', '', 0, '', '');
-    this.usersCollege = '';
-    this.uid = '';
+    this.usersCollege = this.appComponent.currentUser.college;
+    this.uid = this.appComponent.currentUser.uid;
     this.toastCreatePostErrorMessageHidden = true;
     this.toastCreatePostSuccessMessageHidden = true;
     this.toastInvalidPostMessageHidden = true;
-  }
-
-  ngOnInit()
-  {
-    this.authSubscription = this.af.auth.subscribe(auth => {
-      this.uid = auth.auth.uid;
-      this.item = this.af.database.object(`/users/${this.uid}`);
-      this.itemSubscription = this.item.subscribe(snapshot => {
-        this.usersCollege = snapshot['college'];
-      });
-    });
   }
 
   post()
@@ -50,10 +36,10 @@ export class CreatePostComponent implements OnInit, OnDestroy
       this.toastPostInvalid();
       return;
     }
-    this.postToUsersCollegeNode();
+    this.sendPostToFirebase();
   }
 
-  postToUsersCollegeNode()
+  sendPostToFirebase()
   {
       let dict = {
                   'title': this.newPost.title,
@@ -72,7 +58,6 @@ export class CreatePostComponent implements OnInit, OnDestroy
       .catch(() => {
         this.toastErrorMessage();
       });
-
   }
 
   toastPostInvalid()
@@ -94,14 +79,6 @@ export class CreatePostComponent implements OnInit, OnDestroy
     this.toastCreatePostErrorMessageHidden = false;
     this.toastInvalidPostMessageHidden = true;
     this.toastCreatePostSuccessMessageHidden = true;
-  }
-
-  ngOnDestroy()
-  {
-    if(this.appComponent.authStatus === null || this.authSubscription === undefined) { return; }
-    this.authSubscription.unsubscribe();
-    this.itemSubscription.unsubscribe();
-    if(this.postSubscription !== undefined) { this.postSubscription.unsubscribe(); }
   }
 
   postIsValid(): boolean

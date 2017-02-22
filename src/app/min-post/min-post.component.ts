@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { AppComponent } from '../app.component';
 import { PostModel } from '../../models/post-model';
 import { AngularFire, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2';
@@ -9,9 +9,11 @@ import { AngularFire, FirebaseObjectObservable, FirebaseListObservable } from 'a
   styleUrls: ['./min-post.component.css']
 })
 
-export class MinPostComponent implements OnInit, OnDestroy
+export class MinPostComponent implements OnDestroy
 {
 
+  uid: string;
+  college: string;
   post: PostModel;
   item: FirebaseObjectObservable <any>;
   usersCollege: string;
@@ -19,22 +21,16 @@ export class MinPostComponent implements OnInit, OnDestroy
   itemSubscription;
   postSubscription;
 
-  constructor(private af: AngularFire, private authStatus: AppComponent)
+  constructor(private af: AngularFire, private appComponent: AppComponent)
   { 
+    this.uid = this.appComponent.currentUser.uid;
+    this.college = this.appComponent.currentUser.college;
     this.post = new PostModel('', '', 0, '', '');
-  }
-
-  ngOnInit()
-  {
-
   }
 
   ngOnDestroy()
   {
-    if(this.authStatus === null || this.authSubscription === undefined || this.postSubscription === undefined) { return; }
-    this.authSubscription.unsubscribe();
-    this.itemSubscription.unsubscribe();
-    this.postSubscription.unsubscribe();
+
   }
 
 }
