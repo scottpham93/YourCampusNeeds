@@ -13,7 +13,6 @@ import { AngularFire, FirebaseObjectObservable, FirebaseListObservable } from 'a
 
 export class MinPostComponent implements OnInit, OnDestroy
 {
-
   uid: string;
   college: string;
   posts = [];
@@ -76,6 +75,7 @@ export class MinPostComponent implements OnInit, OnDestroy
 
   ngOnDestroy()
   {
+    // Not really sure if the if's are necessary, but it doesn't hurt either
     if(this.itemSubscription !== null) { this.itemSubscription.unsubscribe(); }
     if(this.innerItemSubscription !== null) { this.innerItemSubscription.unsubscribe(); }
 

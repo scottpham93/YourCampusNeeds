@@ -35,7 +35,7 @@ export class CreatePostComponent implements OnInit, OnDestroy
 
   ngOnInit()
   {
-    if(this.uid === null || this.college === null)
+    if((this.uid === null || this.college === null) && this.appComponent.authStatus !== null)
     {
       this.authSubscription = this.af.auth.subscribe(auth => {
         this.uid = auth.auth.uid;
