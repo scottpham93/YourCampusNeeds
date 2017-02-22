@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NewPostModel } from '../../models/new-post';
+import { PostModel } from '../../models/post-model';
 import { AngularFire, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2';
 import { Router } from '@angular/router';
 import { AppComponent } from '.././app.component';
@@ -11,19 +11,22 @@ import { AppComponent } from '.././app.component';
 })
 export class CreatePostComponent implements OnInit, OnDestroy
 {
-  newPost: NewPostModel;
+  newPost: PostModel;
   usersCollege: string;
+  uid: string;
   toastCreatePostErrorMessageHidden: boolean;
   toastCreatePostSuccessMessageHidden: boolean;
   toastInvalidPostMessageHidden: boolean;
   item: FirebaseObjectObservable<any>;
   authSubscription;
   itemSubscription;
+  postSubscription;
 
   constructor(private af: AngularFire, private router: Router, private appComponent: AppComponent)
   {
-    this.newPost = new NewPostModel('', '', 0, '', '');
+    this.newPost = new PostModel('', '', 0, '', '');
     this.usersCollege = '';
+    this.uid = '';
     this.toastCreatePostErrorMessageHidden = true;
     this.toastCreatePostSuccessMessageHidden = true;
     this.toastInvalidPostMessageHidden = true;
@@ -32,10 +35,11 @@ export class CreatePostComponent implements OnInit, OnDestroy
   ngOnInit()
   {
     this.authSubscription = this.af.auth.subscribe(auth => {
-        this.item = this.af.database.object('/users/' + auth.auth.uid);
-        this.itemSubscription = this.item.subscribe(snapshot => {
-          this.usersCollege = snapshot['college'];
-        });
+      this.uid = auth.auth.uid;
+      this.item = this.af.database.object(`/users/${this.uid}`);
+      this.itemSubscription = this.item.subscribe(snapshot => {
+        this.usersCollege = snapshot['college'];
+      });
     });
   }
 
@@ -43,9 +47,7 @@ export class CreatePostComponent implements OnInit, OnDestroy
   {
     if(!this.postIsValid())
     {
-      this.toastInvalidPostMessageHidden = false;
-      this.toastCreatePostSuccessMessageHidden = true;
-      this.toastCreatePostErrorMessageHidden = true;
+      this.toastPostInvalid();
       return;
     }
     this.postToUsersCollegeNode();
@@ -59,17 +61,39 @@ export class CreatePostComponent implements OnInit, OnDestroy
                   'reward': this.newPost.reward,
                   'category': this.newPost.category,
                   'subCategory': this.newPost.category };
-      this.af.database.list(`/posts/${this.usersCollege}/${this.newPost.category}/${this.newPost.subCategory}`).push(dict)
+      let postReference = this.af.database.list('/posts').push(dict).key;
+      let referenceDict = { };
+      referenceDict[postReference] = 1;
+      this.af.database.object(`/user-posts/${this.uid}`).update(referenceDict);
+      this.af.database.object(`/post-references/${this.usersCollege}/${this.newPost.category}`).update(referenceDict)
       .then(() => {
-        this.toastCreatePostErrorMessageHidden = true;
-        this.toastInvalidPostMessageHidden = true;
-        this.toastCreatePostSuccessMessageHidden = false;
+        this.toastSuccessMessage();
       })
       .catch(() => {
-        this.toastCreatePostErrorMessageHidden = false;
-        this.toastInvalidPostMessageHidden = true;
-        this.toastCreatePostSuccessMessageHidden = true;
+        this.toastErrorMessage();
       });
+
+  }
+
+  toastPostInvalid()
+  {
+    this.toastInvalidPostMessageHidden = false;
+    this.toastCreatePostSuccessMessageHidden = true;
+    this.toastCreatePostErrorMessageHidden = true;
+  }
+
+  toastSuccessMessage()
+  {
+    this.toastCreatePostErrorMessageHidden = true;
+    this.toastInvalidPostMessageHidden = true;
+    this.toastCreatePostSuccessMessageHidden = false;
+  }
+
+  toastErrorMessage()
+  {
+    this.toastCreatePostErrorMessageHidden = false;
+    this.toastInvalidPostMessageHidden = true;
+    this.toastCreatePostSuccessMessageHidden = true;
   }
 
   ngOnDestroy()
@@ -77,6 +101,7 @@ export class CreatePostComponent implements OnInit, OnDestroy
     if(this.appComponent.authStatus === null || this.authSubscription === undefined) { return; }
     this.authSubscription.unsubscribe();
     this.itemSubscription.unsubscribe();
+    if(this.postSubscription !== undefined) { this.postSubscription.unsubscribe(); }
   }
 
   postIsValid(): boolean
