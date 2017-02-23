@@ -4,6 +4,7 @@ import { PostModel } from '../../models/post-model';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { AngularFire, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2';
+import * as Collections from 'typescript-collections';
 
 @Component({
   selector: 'app-min-post',
@@ -16,6 +17,7 @@ export class MinPostComponent implements OnInit, OnDestroy
   uid: string;
   college: string;
   posts = [];
+  postsStack: Collections.Stack <any>;
   item: FirebaseObjectObservable <any>;
   authSubscription: Subscription;
   userSubscription: Subscription;
@@ -30,6 +32,7 @@ export class MinPostComponent implements OnInit, OnDestroy
     this.userSubscription = null;
     this.itemSubscription = null;
     this.innerItemSubscription = null;
+    this.postsStack = new Collections.Stack();
   }
 
   ngOnInit()
@@ -52,8 +55,8 @@ export class MinPostComponent implements OnInit, OnDestroy
 
   getPost(category: string)
   {
-    let maxElements = 2;
-    this.itemSubscription = this.af.database.list(`/post-references/${this.college}/${category}`, { preserveSnapshot: true })
+    let maxElements = 3;
+    this.itemSubscription = this.af.database.object(`/post-references/${this.college}/${category}`, { preserveSnapshot: true })
     .subscribe(snapshots => {
       snapshots.forEach(snapshot => {
         this.item = this.af.database.object(`/posts/${snapshot.key}`);
@@ -63,19 +66,29 @@ export class MinPostComponent implements OnInit, OnDestroy
                                         postItems['reward'],
                                         postItems['category'],
                                         postItems['subCategory'] );
-          // we want to limit the number of posts that render
-          if(this.posts.length <= maxElements - 1)
+          this.postsStack.push(post);
+          this.innerItemSubscription.unsubscribe();
+          if(this.postsStack.size() >= maxElements)
           {
-            this.posts.push(post);
+            this.popStackToArray(this.postsStack);
           }
         },
         error => {
           console.log('Something went wrong. Unsubscribing.');
-          this.innerItemSubscription.unsubscribe();
           return;
         });
      });
-    })
+     this.itemSubscription.unsubscribe();
+    });
+  }
+
+  popStackToArray(stack: Collections.Stack <any>)
+  {
+    let size = stack.size();
+    for(let i = 0 ; i < size; i++)
+    {
+      this.posts[i] = stack.pop();
+    }
   }
 
   ngOnDestroy()
