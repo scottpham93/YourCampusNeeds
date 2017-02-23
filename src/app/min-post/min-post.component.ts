@@ -63,6 +63,7 @@ export class MinPostComponent implements OnInit, OnDestroy
                                         postItems['reward'],
                                         postItems['category'],
                                         postItems['subCategory'] );
+          // we want to limit the number of posts that render
           if(this.posts.length <= maxElements - 1)
           {
             this.posts.push(post);

@@ -63,7 +63,7 @@ export class CreatePostComponent implements OnInit, OnDestroy
                   'description': this.newPost.description,
                   'reward': this.newPost.reward,
                   'category': this.newPost.category,
-                  'subCategory': this.newPost.category };
+                  'subCategory': this.newPost.subCategory };
       let postReference = this.af.database.list('/posts').push(dict).key;
       let referenceDict = { };
       referenceDict[postReference] = 1;
