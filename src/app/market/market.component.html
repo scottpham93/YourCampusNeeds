@@ -1,0 +1,20 @@
+<div class="row text-center custom-filter-spacing">
+  <span>
+    <h3 class="custom-inline"><a class="custom-link-color">Most Recent</a></h3>
+    <h3 class="custom-inline custom-separator-spacing">|</h3>
+    <h3 class="custom-inline"><a>Trending</a></h3>
+  </span>
+</div>
+
+<!-- TODO: finish the post component and then inject it here -->
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <app-min-post></app-min-post>
+  </div>
+</div>
+
+<modal #createPostModal title="Quick Post!">
+  <modal-content>
+    <app-create-post></app-create-post>
+  </modal-content>
+</modal>

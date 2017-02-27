@@ -4,11 +4,11 @@ import { AppComponent } from '.././app.component';
 import { ModalModule, Modal } from 'ngx-modal';
 
 @Component({
-  selector: 'app-square',
-  templateUrl: './square.component.html',
-  styleUrls: ['./square.component.css']
+  selector: 'app-market',
+  templateUrl: './market.component.html',
+  styleUrls: ['./market.component.css']
 })
-export class SquareComponent implements OnInit
+export class MarketComponent implements OnInit
 {
 
   constructor(private ac: AppComponent, private router: Router) { }
@@ -16,10 +16,5 @@ export class SquareComponent implements OnInit
   ngOnInit()
   {
     if(this.ac.authStatus === null && this.ac.authStatus !== undefined) { this.router.navigate(['/login']); }
-  }
-
-  marketRedirect()
-  {
-    this.router.navigate(['/market']);
   }
 }

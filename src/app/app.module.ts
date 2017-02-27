@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { SquareComponent } from './square/square.component';
+import { MarketComponent } from './market/market.component';
 import { PostComponent } from './post/post.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { HomeComponent } from './home/home.component';
@@ -22,6 +23,7 @@ import { MinPostComponent } from './min-post/min-post.component';
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'square', component: SquareComponent },
+  { path: 'market', component: MarketComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'create-post', component: CreatePostComponent },
@@ -51,6 +53,7 @@ export const myFirebaseAuthConfig = {
     RegisterComponent,
     LoginComponent,
     SquareComponent,
+    MarketComponent,
     PostComponent,
     PageNotFoundComponent,
     HomeComponent,
